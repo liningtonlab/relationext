@@ -2,7 +2,6 @@ import re
 import nltk
 import spacy
 from nltk.data import retrieve
-from nltk import Tree
 from numpy.lib.utils import source
 from spacy.tokens import Doc
 from collections import OrderedDict
@@ -10,6 +9,7 @@ from collections import OrderedDict
 nlp = spacy.load('en_core_web_sm')
 # nltk.download('punkt')
 
+# List of relation terms to capture the relationships between a compound and an organism
 RELATION1 = ["isolate", "identify", "obtain", "discover", "yield", "characterize", "characterise", "produce", "purify", "saponify", "elucidate", "give", "afford", "separate", "contain", "generate", "reveal", "characterise", "provide", "furnish", "ascribe", "return", "establish"]
 RELATION2 = ["isolates", "identifies", "obtains", "discovers", "yields", "characterizes", "characterises", "produces", "purifies", "saponifies", "elucidates", "gives", "affords", "separates", "contains", "generates", "reveals", "characterises", "provides", "furnishes", "ascribes", "returns", "establishes"]
 RELATION3 = ["isolated", "identified", "obtained", "discovered", "yielded", "characterized", "characterised", "produced", "purified", "saponified", "elucidated", "gave", "given", "afforded", "separated", "contained", "generated", "revealed", "characterised", "provided", "furnished", "ascribed", "returned", "established", "determined"]
@@ -26,6 +26,14 @@ N_ORG_SAME_SENT_CONJUNCTION = ["While", "while", "respectively"]
 
 
 def get_result(comp_dict, micro_org_dict, higher_org_dict, comp_micro_rel, micro_higher_rel):
+    """Returns a dictionary containing a relationship {comp, org, rel}.
+        :param comp_dict: a dictionary containing the compounds that have a relationship
+        :param micro_org_dict: a dictionary containing the micro organisms that have a relationship
+        :param higher_org_dict: a dictionary containing the higher organisms that have a relationship
+        :param comp_micro_rel: a list containing all the relation terms that were captured between compounds and organisms
+        :param micro_higher_rel: a list containing all the relation terms that were captured between micro_org and higher_org
+        :return: a dictionary {comp, org, rel}
+        """
 
     comp_org_rel_list = ", ".join(comp_micro_rel)
     comp_org_rel_dict = {
@@ -40,7 +48,14 @@ def get_result(comp_dict, micro_org_dict, higher_org_dict, comp_micro_rel, micro
 
 
 def get_one_org_n_comp_result(comp_dict, micro_org_dict, higher_org_dict, comp_micro_rel, comp_higher_rel, micro_higher_rel):
-
+    """Returns a dictionary containing a relationship {comp, org, rel} when there is only 1 compound and 1 organism in a sentence.
+        :param comp_dict: a dictionary containing the compounds that have a relationship
+        :param micro_org_dict: a dictionary containing the micro organisms that have a relationship
+        :param higher_org_dict: a dictionary containing the higher organisms that have a relationship
+        :param comp_micro_rel: a list containing all the relation terms that were captured between compounds and organisms
+        :param micro_higher_rel: a list containing all the relation terms that were captured between micro_org and higher_org
+        :return: a dictionary {comp, org, rel}
+        """
     if comp_micro_rel:
         comp_org_rel_list = ", ".join(comp_micro_rel)
         comp_org_rel_dict = {
@@ -65,6 +80,14 @@ def get_one_org_n_comp_result(comp_dict, micro_org_dict, higher_org_dict, comp_m
 
 
 def get_n_org_n_comp_same_sent_result(comp_dict, micro_org_dict, higher_org_dict, comp_micro_rel, comp_higher_rel, case):
+    """Returns a dictionary containing a relationship {comp, org, rel} when there are more than 1 compound and more than 1 organism in a sentence.
+        :param comp_dict: a dictionary containing the compounds that have a relationship
+        :param micro_org_dict: a dictionary containing the micro organisms that have a relationship
+        :param higher_org_dict: a dictionary containing the higher organisms that have a relationship
+        :param comp_micro_rel: a list containing all the relation terms that were captured between compounds and organisms
+        :param micro_higher_rel: a list containing all the relation terms that were captured between micro_org and higher_org
+        :return: a dictionary {comp, org, rel}
+        """
 
     comp_org_rel_list = []
 
@@ -100,6 +123,16 @@ def get_n_org_n_comp_same_sent_result(comp_dict, micro_org_dict, higher_org_dict
 
 
 def comp_rel_org_activities_result(abstract, comp_dict, micro_org_dict, higher_org_dict, comp_micro_rel, comp_higher_rel, case):
+    """Returns a dictionary containing a relationship {comp, org, rel} when the sentence also exists an "activity relationship".
+        :param abstract: abstract text as a string
+        :param comp_dict: a dictionary containing the compounds that have a relationship
+        :param micro_org_dict: a dictionary containing the micro organisms that have a relationship
+        :param higher_org_dict: a dictionary containing the higher organisms that have a relationship
+        :param comp_micro_rel: a list containing all the relation terms that were captured between compounds and organisms
+        :param micro_higher_rel: a list containing all the relation terms that were captured between micro_org and higher_org
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
 
     micro_org_pattern = "(micro_org_\d+)"
     higher_org_pattern = "(higher_org_\d+)"
@@ -136,8 +169,13 @@ def comp_rel_org_activities_result(abstract, comp_dict, micro_org_dict, higher_o
                     return comp_org_rel_dict
                 
 
-# Return a dictionary of compounds for the current sentence/abstract
 def get_comp_dict(abstract, doc, chem_list_item):
+    """Return a dictionary of compounds for the current sentence/abstract.
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :return: a list dictionary containing all the compounds in the current sentence/abstract
+        """
 
     # Count the number of compunds in the current abstract
     # Create a dictionary of length comp_n
@@ -169,8 +207,13 @@ def get_comp_dict(abstract, doc, chem_list_item):
     return comp_dict
 
 
-# Return a dictionary of micro organisms for the current sentence/abstract
 def get_micro_org_dict(abstract, doc, source_list):
+    """Return a dictionary of micro organisms for the current sentence/abstract.
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :return: a list dictionary containing all the micro organisms in the current sentence/abstract
+        """
     
     # Count the number of micro organisms in the current abstract
     # Create a dictionary of length micro_org_n
@@ -198,8 +241,14 @@ def get_micro_org_dict(abstract, doc, source_list):
     return micro_org_dict
 
 
-# Return a dictionary of higher organisms for the current sentence/abstract
+
 def get_higher_org_dict(abstract, doc, source_list):
+    """Return a dictionary of higher organisms for the current sentence/abstract
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :return: a list dictionary containing all the higher organisms in the current sentence/abstract
+        """
     
     # Count the number of higher organisms in the current abstract
     # Create a dictionary of length higher_org_n
@@ -227,6 +276,14 @@ def get_higher_org_dict(abstract, doc, source_list):
 
 
 def get_one_org_n_comp_diff_sent_relation(abstract, doc, chem_list_item, source_list):
+    """Returns a dictionary containing cross-setnence relationship {comp, org, rel},
+        where the compounds and organism are in different sentences in the current abstract.
+        This only works when there is only 1 organism, regardless of micro or higher, in the whole abstract, but there can be more than 1 compound.
+        :param abstract: abstract text as a string
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :return: a dictionary {comp, org, rel}
+        """
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -263,82 +320,16 @@ def get_one_org_n_comp_diff_sent_relation(abstract, doc, chem_list_item, source_
 
 
 def get_obtained_by_relation(abstract, doc, chem_list_item, source_list, case):
-    comp_dict = get_comp_dict(abstract, doc, chem_list_item)
-    micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
-    higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: [comp] [RELATION3] [org]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
 
-    comp_micro_rel = []
-    comp_higher_rel = []
-    micro_higher_rel = []
-
-    if case == "obtained_by_micro":
-
-        pattern = re.compile(r"comp_\d+.*micro_org_\d+")
-        pattern_res = pattern.search(abstract)
-        if pattern_res:
-            substring = pattern_res.group(0)
-            # print("substring: ", substring)
-
-            pattern_rel = re.compile(r'obtained by.*\b(%s)\b' % '|'.join(RELATION4))
-            pattern_rel_res = pattern_rel.search(substring)
-            if pattern_rel_res:
-                comp_micro_rel.append(pattern_rel_res.group(0))
-                # print(pattern_res.group(0))
-    else:
-        pattern = re.compile(r"comp_\d+.*higher_org_\d+")
-        pattern_res = pattern.search(abstract)
-        if pattern_res:
-            substring = pattern_res.group(0)
-            # print("substring: ", substring)
-
-            pattern_rel = re.compile(r'obtained by.*\b(%s)\b' % '|'.join(RELATION4))
-            pattern_rel_res = pattern_rel.search(substring)
-            if pattern_rel_res:
-                comp_higher_rel.append(pattern_rel_res.group(0))
-
-    return get_one_org_n_comp_result(comp_dict, micro_org_dict, higher_org_dict, comp_micro_rel, comp_higher_rel, micro_higher_rel)
-
-
-
-
-def get_of_org_rel_comp(abstract, doc, chem_list_item, source_list, case):
-    comp_dict = get_comp_dict(abstract, doc, chem_list_item)
-    micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
-    higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
-
-    comp_micro_rel = []
-    comp_higher_rel = []
-    micro_higher_rel = []
-    
-    if case == "of_micro_rel_comp":
-        pattern = re.compile(r"micro_org_\d+.*comp_\d+")
-        pattern_res = pattern.search(abstract)
-        if pattern_res:
-            substring = pattern_res.group(0)
-            # print("substring: ", substring)
-
-            pattern_rel = re.compile(r'\b(%s)\b' % '|'.join(RELATION3))
-            pattern_rel_res = pattern_rel.findall(substring)
-            if pattern_rel_res:
-                comp_micro_rel = pattern_rel_res
-                # print(pattern_rel_res)
-    else:
-        pattern = re.compile(r"higher_org_\d+.*comp_\d+")
-        pattern_res = pattern.search(abstract)
-        if pattern_res:
-            substring = pattern_res.group(0)
-            # print("substring: ", substring)
-
-            pattern_rel = re.compile(r'\b(%s)\b' % '|'.join(RELATION3))
-            pattern_rel_res = pattern_rel.findall(substring)
-            if pattern_rel_res:
-                comp_higher_rel = pattern_rel_res
-                # print(pattern_rel_res)
-
-    return get_one_org_n_comp_result(comp_dict, micro_org_dict, higher_org_dict, comp_micro_rel, comp_higher_rel, micro_higher_rel)
-
-
-def get_obtained_by_relation(abstract, doc, chem_list_item, source_list, case):
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -377,6 +368,16 @@ def get_obtained_by_relation(abstract, doc, chem_list_item, source_list, case):
 
 
 def get_of_org_rel_comp(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: of [org] [ACTION] [comp]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -414,6 +415,17 @@ def get_of_org_rel_comp(abstract, doc, chem_list_item, source_list, case):
 
 
 def get_resulted_in_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: [org] resulted_in [comp]
+        Rule: [RELATION4] of [comp] [org]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -486,6 +498,16 @@ def get_resulted_in_relation(abstract, doc, chem_list_item, source_list, case):
 
 
 def get_comp_rel_org_together_comp_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: [comp] [rel] [org] [CONJUCTION] [comp]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -536,6 +558,16 @@ def get_comp_rel_org_together_comp_relation(abstract, doc, chem_list_item, sourc
 
 
 def get_comp_rel_together_comp_org_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: [RELATION3] [CONJUCTION] [comp] [org] 
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -586,6 +618,16 @@ def get_comp_rel_together_comp_org_relation(abstract, doc, chem_list_item, sourc
 
 
 def get_rel_from_org_comp_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: [RELATION3] from [micro] [comp]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -621,6 +663,16 @@ def get_rel_from_org_comp_relation(abstract, doc, chem_list_item, source_list, c
 
 
 def get_of_comp_from_org_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: [RELATION4] of [comp]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -658,6 +710,17 @@ def get_of_comp_from_org_relation(abstract, doc, chem_list_item, source_list, ca
 
 
 def get_comp_rel_org_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: [comp] [RELATION3] [org]
+        Rule: [RELATION3] [comp] [org]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -735,6 +798,16 @@ def get_comp_rel_org_relation(abstract, doc, chem_list_item, source_list, case):
 
 
 def get_comp_was_rel_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: [comp] was [RELATION3] [org]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -764,6 +837,16 @@ def get_comp_was_rel_relation(abstract, doc, chem_list_item, source_list, case):
     
 
 def get_org_rel_comp_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence.
+        Rule: [micro] [RELATION1|RELATION2|RELATION3] [comp]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -801,6 +884,14 @@ def get_org_rel_comp_relation(abstract, doc, chem_list_item, source_list, case):
 
 
 def get_all_org_rel_same_sent_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and more than 1 organism when they are in the same sentence and exists a term from [N_MICRO_SAME_SENT].
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -817,17 +908,18 @@ def get_all_org_rel_same_sent_relation(abstract, doc, chem_list_item, source_lis
             comp_micro_rel = pattern_rel_res
             # match sourcelist and pattern_res based on placeholder
 
-    # else:
-    #     pattern_rel = re.compile(r'higher_org_\d+')
-    #     pattern_rel_res = pattern_rel.findall(abstract)
-    #     if pattern_rel_res:
-    #         # print(pattern_rel_res)
-    #         comp_higher_rel = pattern_rel_res
-
     return get_n_org_n_comp_same_sent_result(comp_dict, micro_org_dict, higher_org_dict, comp_micro_rel, comp_higher_rel, case)
 
 
 def get_comp_rel_org_activities_relation(abstract, doc, chem_list_item, source_list, case):
+    """Extracts the relationship between a compound and an organism when they are in the same sentence and exists a term from [ACTIVITY_AGAINST].
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
 
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
@@ -893,6 +985,16 @@ def get_comp_rel_org_activities_relation(abstract, doc, chem_list_item, source_l
 
 
 def get_micro_higher_rel_comp_relation(abstract, doc, chem_list_item, source_list):
+    """Extracts the relationship between a micro organism and higher organism when they are in the same sentence.
+        Rule: [micro_org] [RELATION1|RELATION2|RELATION3] [higher_org]
+        :param abstract: abstract text as a string
+        :param doc: a doc object of the abstract text
+        :param chem_list_item: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: indicates which case has been detected
+        :return: a dictionary {comp, org, rel}
+        """
+
     comp_dict = get_comp_dict(abstract, doc, chem_list_item)
     micro_org_dict = get_micro_org_dict(abstract, doc, source_list)
     higher_org_dict = get_higher_org_dict(abstract, doc, source_list)
@@ -918,6 +1020,11 @@ def get_micro_higher_rel_comp_relation(abstract, doc, chem_list_item, source_lis
 
 
 def determine_n_org_same_sent_case(abstract, rel):
+    """When there are more than 1 organism in the same sentence as a compound, determine which caes it is.
+        :param abstract: abstract text as a string
+        :param rel: the case is n_micro_no_higher_n_comp_same_sent
+        :return: the type of relationship
+        """
 
     pattern = re.compile(r'\b(%s)\b' % ('|'.join(N_MICRO_SAME_SENT)))
     pattern_res = pattern.search(abstract)
@@ -930,12 +1037,12 @@ def determine_n_org_same_sent_case(abstract, rel):
         if rel == "n_micro_no_higher_n_comp_same_sent":
             return "all_micro_rel_same_sent"
         
-        # This was returning None
-        # else:
-        #     return "all_higher_rel_same_sent"
-
 
 def determine_rel_activities_same_sent_case(abstract):
+    """When there exists a term from [ACTIVITY_AGAINST] in the same sentence as a compound and organism, determine which caes it is.
+        :param abstract: abstract text as a string
+        :return: the type of relationship
+        """
     
     # comp_1 (1), comp_5, isolated from the seeds and bark of higher_org_1, were tested for insect antifeedant and growth regulatory activities against the tobacco cutworm, higher_org_2
     pattern = re.compile(r'comp_\d+.*\b(%s)\b.*org_\d+.*\b(%s)\b.*org_\d+' % ('|'.join(RELATION3), '|'.join(ACTIVITY_AGAINST)))
@@ -953,6 +1060,12 @@ def determine_rel_activities_same_sent_case(abstract):
 
 
 def determine_case(abstract, rel):
+    """Given the number of compounds and organisms in the current sentence/abstract and whether they are same-sentence or cross-sentence,
+        match current sentence/abstract to a predefined rule.
+        :param abstract: sentence/abstract text as a string
+        :param rel: the case indicating if it's a same-sentence or cross-sentence relationshp and the number of compounds and organisms 
+        :return: the type of relationship detected 
+        """
 
     # If micro = 1 and (higher = 0 or higher = 1)
     if rel == "one_micro_no_higher_n_comp_same_sent":
@@ -1116,6 +1229,10 @@ def determine_case(abstract, rel):
 
 
 def remove_words_from_abstract(compound_tuple):
+    """Remove the terms in [ABBR_TO_BE_REMOVED] from the current abstract.
+        :param compound_tuple: a tuple (comp, span, abstract)
+        :return: a new sentence/abstract
+        """
     # print("compound_tuple ", compound_tuple)
     to_be_removed_pattern = re.compile(r'\b(%s)\b[.]' % '|'.join(ABBR_TO_BE_REMOVED))
     # print(to_be_removed)
@@ -1126,6 +1243,14 @@ def remove_words_from_abstract(compound_tuple):
 
 
 def call_corresponding_relation_function(abstract, doc, item, source_list, case):
+    """Given the the type of relationship that was detected, call the corresponding function to extract the actual relationship.
+        :param abstract: current sentence/abstract text as a string
+        :param doc: a doc object of the current sentence/abstract
+        :param item: a tuple (comp, span, abstract)
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param case: the type of relationship detected 
+        :return: a dictionary of relatinoship {comp, org, rel}
+        """
 
     if case == "obtained_by_micro" or case == "obtained_by_higher":
         return get_obtained_by_relation(abstract, doc, item, source_list, case)
@@ -1181,6 +1306,13 @@ def call_corresponding_relation_function(abstract, doc, item, source_list, case)
 
 
 def get_relation(chem_list, source_list, original_abstract):
+    """Given the the type of relationship that was detected, call the corresponding function to extract the actual relationship.
+        !!!The CROSS-SENTENCE-RELATIONSHIP and MULTIPLE-ORGANISM-IN-A-SENTENCE features are currently turned of!!!
+        :param chem_list: a list of compound entities found int the current sentence/abstract
+        :param source_list: a list of organism entities found int the current sentence/abstract
+        :param original_abstract: current abstract text as a string
+        :return: a list of dictionaries containing relatinoships [{comp1 org, rel}, {comp, org, rel}, {comp, org, rel}...]
+        """
 
     if isinstance(original_abstract, str) and chem_list and not source_list: 
         return []
@@ -1232,6 +1364,7 @@ def get_relation(chem_list, source_list, original_abstract):
         micro_org_abstract_n = len(re.findall(micro_org_pattern, new_abstract))
         higher_org_abstract_n = len(re.findall(higher_org_pattern, new_abstract))
 
+        # If there is only 1 oganism in the whole abstract, regardless of micro or higher
         if (micro_org_abstract_n + higher_org_abstract_n == 1) or (micro_org_abstract_n == 1 and higher_org_abstract_n == 1):
             
             for item in chem_list:
@@ -1263,6 +1396,7 @@ def get_relation(chem_list, source_list, original_abstract):
 
                     else:
 
+                        # !!!CROSS-SENTENCE-RELATIONSHIP feature is currently turned off!!!
                         if comp_n == 0 and (micro_org_sent_n + higher_org_sent_n > 0) or comp_n > 0 and (micro_org_sent_n + higher_org_sent_n == 0):
 
                             if micro_org_abstract_n + higher_org_abstract_n == 1:
@@ -1287,6 +1421,7 @@ def get_relation(chem_list, source_list, original_abstract):
                     if rel_to_be_added:
                         list_for_dict.append(rel_to_be_added)
 
+        # If there is more than 1 oganism in the whole abstract, regardless of micro or higher
         else:
 
             for item in chem_list:
@@ -1316,6 +1451,7 @@ def get_relation(chem_list, source_list, original_abstract):
                         elif micro_org_sent_n == 1 and higher_org_sent_n == 1: 
                             rel = "one_micro_one_higher_n_comp_same_sent"
                         
+                        # !!!MULTIPLE-ORGANISM-IN-A-SENTENCE feature is currently turned off!!!
                         elif micro_org_sent_n > 1 and higher_org_sent_n == 0: 
                             # rel = "n_micro_no_higher_n_comp_same_sent"
                             continue
