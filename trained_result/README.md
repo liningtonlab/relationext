@@ -1,7 +1,10 @@
 # Trained Result
 
 ## 1M Pubmed Data
-1. [pubmed_priority_taxonerd_ner_1](./1M_pubmed_articles/pubmed_priority_taxonerd_ner_1.json) contains trained result from 1 million PubMed articles where NER_result = 1.
+
+Parts of the data have to be downloaded from another [cloud drive](https://vault.sfu.ca/index.php/s/oKZ44IlZsKo2Btj) due to large file size.
+
+1. [pubmed_priority_taxonerd_ner_1](https://vault.sfu.ca/index.php/s/h3Z5bbvp5nJTxCf) contains trained result from 1 million PubMed articles where NER_result = 1.
 ```bash
 # The dataset is generated using this Mongo aggregated pipeline.
 # Pipeline exported as Python 3:
@@ -54,7 +57,7 @@
 ]
 ```
 
-2. [andrew_inner_join_pubmed_priority_taxonerd](./1M_pubmed_articles/andrew_inner_join_pubmed_priority_taxonerd.json) contains Andrew Maras' manual annotated dataset inner-joined with the 1 million PubMed articles on doi.
+2. [andrew_inner_join_pubmed_priority_taxonerd](https://vault.sfu.ca/index.php/s/omTayOcX4Muqw4w) contains Andrew's manual annotated dataset inner-joined with the 1 million PubMed articles on doi.
 ```bash
 # The dataset is generated using this Mongo aggregated pipeline.
 # Pipeline exported as Python 3:
@@ -92,7 +95,7 @@
 ]
 ```
 
-3. [pubmed_priority_taxonerd_comp_1](./1M_pubmed_articles/pubmed_priority_taxonerd_comp_1.json) ccontains trained result from 1 million PubMed articles where an abstract has at least 1 compound.
+3. [pubmed_priority_taxonerd_comp_1](https://vault.sfu.ca/index.php/s/Huqe4bxT68HazWE) ccontains trained result from 1 million PubMed articles where an abstract has at least 1 compound.
 ```bash
 # The dataset is generated using this Mongo aggregated pipeline.
 # Query exported as Python 3:
@@ -113,14 +116,14 @@
  }
 }
 ```
-4. [pubmed_priority_taxonerd_containing_matching_npatlas_comp](./1M_pubmed_articles/pubmed_priority_taxonerd_containing_matching_npatlas_comp.json) ccontains trained result from 1 million PubMed articles where an abstract has at least 1 compound that is also in the NPAtlas.
+4. [pubmed_priority_taxonerd_containing_matching_npatlas_comp](https://vault.sfu.ca/index.php/s/TvD9jSE93zb5TfI) contains trained result from 1 million PubMed articles where an abstract has at least 1 compound that is also in the NPAtlas.
 ```bash
 # Module to generate this dataset:
 cd independent_modules
 $ 1m_pubmed_ner_re.py
 ```
 
-5. [pubmed_priority_taxonerd_ner_1_matching_npatlas_comp](./1M_pubmed_articles/pubmed_priority_taxonerd_ner_1_matching_npatlas_comp.json) contains trained result from 1 million PubMed articles where NER_result = 1 and the abstract also has at least 1 compound that is in the NPAtlas.
+5. [pubmed_priority_taxonerd_ner_1_matching_npatlas_comp](https://vault.sfu.ca/index.php/s/bleXMcDhE2kUrVS) contains trained result from 1 million PubMed articles where NER_result = 1 and the abstract also has at least 1 compound that is in the NPAtlas.
 ```bash
 # Module to generate this dataset:
 cd independent_modules
