@@ -7,6 +7,13 @@ import pandas as pd
 t = time.time()
 
 def load_data(filename, compound_column_name):
+    """Load the input excel file and clean up the compounds by removing those that have <=5 and >=25 characters in len and those have contain >5 digits.
+        Eg. BCA 1; Toxin; F-11334-B1; (4S)-2,4-dimethyl-5-oxo-2,5-dihydrofuran-3-carboxylic acid; 1,4,6b,7,10-pentahydroxy-1,2,6b,7,8,12b-hexahydroperylene-3,9-dione
+        :param raw_compound: compound to extract the root name from
+        :param ignore_list: a list of terms that should be ignored when extracting the root names int an abstract
+        :param leading_names_list: a list of prefixes that should be ignored when extracting the root names int an abstract
+        :return: extracted root name
+        """
 
     compound_df = pd.read_excel(filename, index_col=None)
 
@@ -31,6 +38,14 @@ def load_data(filename, compound_column_name):
 
 # Extract the root name from compounds that contain only alphabets.
 def match_alpha_only(raw_compound, ignore_list, leading_names):
+    """Extracts the root name from a compound that contains only alpha characters, not including acids.
+        Eg. Putrebactin; Epoxomicin
+        :param raw_compound: compound to extract the root name from
+        :param ignore_list: a list of terms that should be ignored when extracting the root names int an abstract
+        :param leading_names_list: a list of prefixes that should be ignored when extracting the root names int an abstract
+        :return: extracted root name
+        """
+
     compound_name_match = re.finditer(r"^[a-zA-Z]+$", raw_compound)
     for comp in compound_name_match:
         if comp not in ignore_list+leading_names:
@@ -39,6 +54,14 @@ def match_alpha_only(raw_compound, ignore_list, leading_names):
 
 # Extract the root name from compounds that are followed by a letter, eg. Examplamides A.
 def match_name_with_variant(raw_compound, ignore_list, leading_names):
+    """Extracts the root name from a compound that is a variant of a group of compounds. 
+        Eg. Expansolide A; Expansolide B
+        :param raw_compound: compound to extract the root name from
+        :param ignore_list: a list of terms that should be ignored when extracting the root names int an abstract
+        :param leading_names_list: a list of prefixes that should be ignored when extracting the root names int an abstract
+        :return: extracted root name
+        """
+
     compound_name_match = re.finditer(r"^[a-zA-Z]+\s(?!acid)[a-zA-Z\d+\-]{1,5}$", raw_compound)
     for comp in compound_name_match:
         split_list = re.split(r"\s", comp[0])
@@ -48,6 +71,13 @@ def match_name_with_variant(raw_compound, ignore_list, leading_names):
 
 # Extract the root name from compounds that have the term "acid" as part of the full compound name.
 def match_acid_name(raw_compound, ignore_list, leading_names):
+    """Extracts the root name from a compound that contains the term "acid". 
+        Eg. Cyanuric acid; Secalonic acid
+        :param raw_compound: compound to extract the root name from
+        :param ignore_list: a list of terms that should be ignored when extracting the root names int an abstract
+        :param leading_names_list: a list of prefixes that should be ignored when extracting the root names int an abstract
+        :return: extracted root name
+        """
 
     # Compound acid
     compound_name_match = re.findall(r"(?:\w+\s|\w+\'){0,3}\w+\s\bacid\b", raw_compound)
@@ -70,6 +100,14 @@ def match_acid_name(raw_compound, ignore_list, leading_names):
 
 # Extract the root name from compounds that are none of the above.
 def match_complex_name(raw_compound, ignore_list, leading_names):
+    """Extracts the root name from a compound that is complex, as in containing non alphanumeric characters. 
+        Eg. (6R)-2,2,6-Trimethyl-1,4-cyclohexanedione; Mannosyl-3-phosphoglycerate
+        :param raw_compound: compound to extract the root name from
+        :param ignore_list: a list of terms that should be ignored when extracting the root names int an abstract
+        :param leading_names_list: a list of prefixes that should be ignored when extracting the root names int an abstract
+        :return: extracted root name
+        """
+
     split_list = re.split(r"\W", raw_compound)
     # print(raw_compound, split_list, len(split_list))
     
@@ -93,7 +131,7 @@ def match_complex_name(raw_compound, ignore_list, leading_names):
 
 # Determines the type of compound and calls the corresponding function.
 def match_root_name(raw_compound, ignore_list, leading_names_list):
-    """When the root name for a compound cannot be automatically extracted, it requires manual extraction from user.
+    """Determines which category a compound belongs to, calls the correponding function, and extracts the root name from the compound.
         :param raw_compound: compound to extract the root name from
         :param ignore_list: a list of terms that should be ignored when extracting the root names int an abstract
         :param leading_names_list: a list of prefixes that should be ignored when extracting the root names int an abstract
