@@ -85,10 +85,13 @@ requirements = [
 'xlrd>=1.2.0',
 'XlsxWriter>=3.0.2']
 
+data_files = [('data', ['animal_genera_list.txt',
+                        'microbe_genera_list.txt'
+            ])]
 
 setuptools.setup(
     name='relationext',
-    version='0.1.3',
+    version='0.1.4',
     author='liningtonlabs',
     author_email='liningtonlabstest@gmail.com',
     description='Testing installation of Package',
@@ -98,4 +101,5 @@ setuptools.setup(
     license='MIT',
     packages=['relationext'],
     install_requires=requirements,
+    data_files=data_files
 )
