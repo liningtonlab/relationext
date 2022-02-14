@@ -1,13 +1,17 @@
+from doctest import OutputChecker
 import json
 import re
 import ast
 from enum import unique
 from os import EX_SOFTWARE
 from taxonerd import TaxoNERD
+import nltk
 
 from organism_categorizer import taxonerd_df_to_dict, replace_org_in_abstract
 from compound_name_extractor import chem_ner_prototype, get_compound
 from relation_extractor import get_relation
+
+nltk.download('punkt')
 
 SOURCE_ORGANISM_REGEX = "[A-Z]{1}[a-z]+ {1}[a-z]+\.? ?[A-Z0-9-]+ ?[A-Z]?[a-zA-Z0-9-]+|[A-Z]{1}[a-z]+ {1}[a-z]+\.?"
 # https://regexr.com/60t8c
@@ -58,11 +62,10 @@ def main(abstract):
 if __name__ == "__main__":
 
     # Example abstract:
-    # Five new hybrid peptide-polyketides, curvularides A-E (1-5), were isolated from the endophytic fungus Curvularia geniculata, 
-    # which was obtained from the limbs of Catunaregam tomentosa. Structure elucidation for curvularides A-E (1-5) was accomplished by 
-    # analysis of spectroscopic data, as well as by single-crystal X-ray crystallography. Curvularide B (2) exhibited antifungal 
-    # activity against Candida albicans, and it also showed synergistic activity with a fluconazole drug.
+    abstract = "Five new hybrid peptide-polyketides, curvularides A-E (1-5), were isolated from the endophytic fungus Curvularia geniculata, \
+    which was obtained from the limbs of Catunaregam tomentosa. Structure elucidation for curvularides A-E (1-5) was accomplished by \
+    analysis of spectroscopic data, as well as by single-crystal X-ray crystallography. Curvularide B (2) exhibited antifungal \
+    activity against Candida albicans, and it also showed synergistic activity with a fluconazole drug."
 
-    abstract = ""
     result = main(abstract)
     print(result)
