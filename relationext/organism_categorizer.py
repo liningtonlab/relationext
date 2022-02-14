@@ -10,10 +10,10 @@ def read_text_file(filename):
 
 
 # Organism lists used in match_org(user).
-micro_list = read_text_file("../data/microbe_genera_list.txt")
-plant_list = read_text_file("../data/plant_genera_list.txt")
-animal_list = read_text_file("../data/animal_genera_list.txt")
-pathogen_list = read_text_file("../data/pathogen_genera_list.txt")
+micro_list = read_text_file("./data/microbe_genera_list.txt")
+plant_list = read_text_file("./data/plant_genera_list.txt")
+animal_list = read_text_file("./data/animal_genera_list.txt")
+pathogen_list = read_text_file("./data/pathogen_genera_list.txt")
 
 
 def match_org(user):
