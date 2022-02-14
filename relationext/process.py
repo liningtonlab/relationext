@@ -6,6 +6,7 @@ from enum import unique
 from os import EX_SOFTWARE
 from taxonerd import TaxoNERD
 import nltk
+import pkg_resources as pkr
 
 from .organism_categorizer import taxonerd_df_to_dict, replace_org_in_abstract
 from .compound_name_extractor import chem_ner_prototype, get_compound
@@ -37,10 +38,13 @@ def get_proper_entity_list(abstract):
 
 def get_relations(abstract):
 
-    with open("../data/root_name_list.txt") as file:
-        lines = file.readlines()
-        root_name_list = [line.rstrip() for line in lines]
-        root_name_list = root_name_list + [x.lower() for x in root_name_list]
+    root_name_list = pkr.resource_string(__name__, "data/root_name_list.txt").decode('utf-8')
+    root_name_list = root_name_list.split("\r\n")
+    root_name_list = root_name_list + [x.lower() for x in root_name_list]
+    # with open("../data/root_name_list.txt") as file:
+    #     lines = file.readlines()
+    #     root_name_list = [line.rstrip() for line in lines]
+    #     root_name_list = root_name_list + [x.lower() for x in root_name_list]
         # print(root_name_list)
     
     if isinstance(abstract, str):
