@@ -1,0 +1,44 @@
+Bacillus anthracis
+Bacillus cereus
+Campylobacter jejuni
+Chlamydia pneumoniae
+Chlamydia trachomatis
+Listeria monocytogenes
+Mycobacterium leprae
+Mycobacterium tuberculosis
+Mycobacterium avium
+Helicobacter pylori
+Salmonella enterica
+Salmonella typhimurium
+Shigella sonnei
+Shigella dysenteriae
+Escherichia coli
+Vibrio cholerae
+Yersinia pestis
+Yersinia pseudotuberculosis
+Burkholderia cepacia
+Burkholderia mallei
+Rickettsia rickettsii
+Treponema pallidum
+Nocardia asteroides
+Nocardia brasiliensis
+Acinetobacter
+Candida albican
+Clostridium
+Cryptococcus gattii
+Echinococcus
+Enterobacter
+Enterococcus
+Fusarium avenaceum
+Giardia
+Haemophilus
+Hormodendrum compactum
+Klebsiella
+Leishmania
+Neisseria
+Plasmodium
+Pneumocystis
+Pyricularia oryzae
+Staphylococcus
+Streptococcus
+Trypanosoma
