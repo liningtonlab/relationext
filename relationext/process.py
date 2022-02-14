@@ -38,14 +38,11 @@ def get_proper_entity_list(abstract):
 
 def get_relations(abstract):
 
-    root_name_list = pkr.resource_string(__name__, "data/root_name_list.txt").decode('utf-8')
-    root_name_list = root_name_list.split("\r\n")
-    root_name_list = root_name_list + [x.lower() for x in root_name_list]
-    # with open("../data/root_name_list.txt") as file:
-    #     lines = file.readlines()
-    #     root_name_list = [line.rstrip() for line in lines]
-    #     root_name_list = root_name_list + [x.lower() for x in root_name_list]
-        # print(root_name_list)
+    with open("../data/root_name_list.txt") as file:
+        lines = file.readlines()
+        root_name_list = [line.rstrip() for line in lines]
+        root_name_list = root_name_list + [x.lower() for x in root_name_list]
+        print(root_name_list)
     
     if isinstance(abstract, str):
             
