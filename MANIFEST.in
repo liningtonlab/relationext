@@ -1,1 +1,1 @@
-include ./relationext/data/microbe_genera_list.txt
+include relationext/data/microbe_genera_list.txt
