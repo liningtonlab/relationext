@@ -1,6 +1,6 @@
 import re
 import json
-import compound_name_extractor
+from . import compound_name_extractor
 
 
 # Importing the list of class compounds from compound_name_extractor.py
