@@ -18,8 +18,11 @@ micro_list = micro_str.split("\r\n")
 plant_str = pkr.resource_string(__name__, "data/plant_genera_list.txt").decode('utf-8')
 plant_list = plant_str.split("\r\n")
 
-animal_list = read_text_file("data/animal_genera_list.txt")
-pathogen_list = read_text_file("data/pathogen_genera_list.txt")
+animal_str = pkr.resource_string(__name__, "data/animal_genera_list.txt").decode('utf-8')
+animal_list = animal_str.split("\r\n")
+
+pathogen_str = pkr.resource_string(__name__, "data/pathogen_genera_list.txt").decode('utf-8')
+pathogen_list = pathogen_str.split("\r\n")
 
 
 def match_org(user):
