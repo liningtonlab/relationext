@@ -90,7 +90,7 @@ requirements = [
 setuptools.setup(
     include_package_data=True,
     name='relationext',
-    version='0.2.8',
+    version='0.2.9',
     author='liningtonlabs',
     author_email='liningtonlabstest@gmail.com',
     description='Testing installation of Package',
