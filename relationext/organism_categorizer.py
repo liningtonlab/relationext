@@ -12,7 +12,7 @@ def read_text_file(filename):
 
 
 # Organism lists used in match_org(user).
-resource = pkr.resource_filename('relationext.data', 'microbe_genera_list.txt')
+resource = pkr.resource_filename('relationext', 'data/microbe_genera_list.txt')
 print(resource)
 print(type(resource))
 micro_list = read_text_file(resource)
