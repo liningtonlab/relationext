@@ -1,7 +1,7 @@
 import csv
 import json
 
-import compound_name_extractor
+from . import compound_name_extractor
 
 
 def sort_list(unsorted_list):
