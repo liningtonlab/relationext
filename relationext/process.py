@@ -7,9 +7,9 @@ from os import EX_SOFTWARE
 from taxonerd import TaxoNERD
 import nltk
 
-from organism_categorizer import taxonerd_df_to_dict, replace_org_in_abstract
-from compound_name_extractor import chem_ner_prototype, get_compound
-from relation_extractor import get_relation
+from .organism_categorizer import taxonerd_df_to_dict, replace_org_in_abstract
+from .compound_name_extractor import chem_ner_prototype, get_compound
+from .relation_extractor import get_relation
 
 
 nltk.download('punkt')

@@ -1,1 +1,1 @@
-from relationext import process, organism_categorizer, compound_name_extractor, relation_extractor
+from . import process, organism_categorizer, compound_name_extractor, relation_extractor
