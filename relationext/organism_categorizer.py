@@ -1,5 +1,5 @@
 import pandas as pd
-from setuptools import pkg_resources
+
 
 # Reads a text file and appends the items in the text file to a list.
 def read_text_file(filename):
