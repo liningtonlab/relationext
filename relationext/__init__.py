@@ -1,1 +1,1 @@
-from relationext import src
+from .src import compound_name_extractor
