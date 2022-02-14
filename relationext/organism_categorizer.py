@@ -12,8 +12,7 @@ def read_text_file(filename):
 
 
 # Organism lists used in match_org(user).
-micro_list_byte = pkr.resource_string(__name__, "data/microbe_genera_list.txt")
-micro_list = [x.decode('utf-8') for x in micro_list_byte]
+micro_list = pkr.resource_string(__name__, "data/microbe_genera_list.txt").decode('utf-8')
 print(micro_list)
 
 plant_list = read_text_file("data/plant_genera_list.txt")
