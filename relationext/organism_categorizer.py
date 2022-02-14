@@ -14,10 +14,10 @@ def read_text_file(filename):
 # Organism lists used in match_org(user).
 micro_str = pkr.resource_string(__name__, "data/microbe_genera_list.txt").decode('utf-8')
 micro_list = micro_str.split("\r\n")
-print(micro_list)
-print(type(micro_list))
 
-plant_list = read_text_file("data/plant_genera_list.txt")
+plant_str = pkr.resource_string(__name__, "data/plant_genera_list.txt").decode('utf-8')
+plant_list = plant_str.split("\r\n")
+
 animal_list = read_text_file("data/animal_genera_list.txt")
 pathogen_list = read_text_file("data/pathogen_genera_list.txt")
 
