@@ -90,7 +90,7 @@ data_files = {'./relationext/data': ['microbe_genera_list.txt']}
 setuptools.setup(
     include_package_data=True,
     name='relationext',
-    version='0.1.6',
+    version='0.1.7',
     author='liningtonlabs',
     author_email='liningtonlabstest@gmail.com',
     description='Testing installation of Package',
