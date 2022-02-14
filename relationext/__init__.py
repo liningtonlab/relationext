@@ -1,1 +1,1 @@
-from src import organism_categorizer, compound_name_extractor, relation_extractor
+from relationext import src
