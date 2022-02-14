@@ -1,6 +1,0 @@
-## NER-RE Pipeline Scripts:
-
-- [main.py](main.py) main function for the NER-RE Pipeline.
-- [compound_name_extractor.py](compound_name_extractor.py) extracts the compound entities from an abstract and returns a list of tuples [[(comp), (span), (abstract)], [(comp), (span), (abstract)], [(comp), (span), (abstract)]].
-- [organism_categorizer.py](organism_categorizer.py) takes the Taxonerd results as input, checks if the species of an organism entity exists in `microbial_genera_list`, `plant_genera_list`, `animal_genera_list`, or `pathogen_genera_list`. Labels the organism entity as a **micro_org_#** if it is in the microbial_genera_list, **higher_org_#** if in the plant_genera_list or animal_genera_list, and **pathogen_org_#** if in the pathogen_genera_list. Replaces the organism entity in the abstract with its corresponding placeholder.
-- [relation_extractor.py](relation_extractor.py) extracts the relationships between compound entities and organism entities from an abstract and returns a list of dictionaries [{comp, org, rel}, {comp, org, rel}, {comp, org, rel}].

@@ -1,1 +1,1 @@
-from .src import compound_name_extractor
+from relationext import process
