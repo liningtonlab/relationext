@@ -38,7 +38,10 @@ def get_proper_entity_list(abstract):
 
 def get_relations(abstract):
 
-    with open("../data/root_name_list.txt") as file:
+    # added to deploy package
+    resource_name = pkr.resource_filename('relationext', 'data/root_name_list.txt')
+
+    with open(resource_name) as file:
         lines = file.readlines()
         root_name_list = [line.rstrip() for line in lines]
         root_name_list = root_name_list + [x.lower() for x in root_name_list]

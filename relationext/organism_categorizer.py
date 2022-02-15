@@ -12,6 +12,7 @@ def read_text_file(filename):
 
 
 # Organism lists used in match_org(user).
+# added to deploy package
 micro_list = read_text_file(pkr.resource_filename('relationext', 'data/microbe_genera_list.txt'))
 plant_list = read_text_file(pkr.resource_filename('relationext', 'data/plant_genera_list.txt'))
 animal_list = read_text_file(pkr.resource_filename('relationext', 'data/animal_genera_list.txt'))
