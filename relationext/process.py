@@ -45,7 +45,7 @@ def get_relations(abstract):
         lines = file.readlines()
         root_name_list = [line.rstrip() for line in lines]
         root_name_list = root_name_list + [x.lower() for x in root_name_list]
-        print(root_name_list)
+        # print(root_name_list)
     
     if isinstance(abstract, str):
             
