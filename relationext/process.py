@@ -30,7 +30,7 @@ def get_proper_entity_list(abstract):
 
     print(entities)
 
-    if len(entities) <= 0:
+    if entities == ['']:
         return None
 
     for ent in entities:
