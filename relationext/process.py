@@ -28,6 +28,9 @@ def get_proper_entity_list(abstract):
     entity = taxon.to_json(orient='records', lines=True)
     entities = entity.splitlines()
 
+    if len(entities) <= 0:
+        return None
+
     for ent in entities:
         string_dict_to_dictionary = json.loads(ent)
         if re.search(SOURCE_ORGANISM_REGEX, string_dict_to_dictionary["text"]):
@@ -50,6 +53,9 @@ def get_relations(abstract):
     if isinstance(abstract, str):
             
         proper_entity_list = get_proper_entity_list(abstract)
+        if proper_entity_list is None:
+            return "No Compounds Found"
+
         source_list = taxonerd_df_to_dict(proper_entity_list)
 
         new_abstract = replace_org_in_abstract(abstract, proper_entity_list)
