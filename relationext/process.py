@@ -28,6 +28,8 @@ def get_proper_entity_list(abstract):
     entity = taxon.to_json(orient='records', lines=True)
     entities = entity.splitlines()
 
+    print(entities)
+
     if len(entities) <= 0:
         return None
 
