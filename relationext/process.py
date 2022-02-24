@@ -13,7 +13,9 @@ from .compound_name_extractor import chem_ner_prototype, get_compound
 from .relation_extractor import get_relation
 
 
-nltk.download()
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 SOURCE_ORGANISM_REGEX = "[A-Z]{1}[a-z]+ {1}[a-z]+\.? ?[A-Z0-9-]+ ?[A-Z]?[a-zA-Z0-9-]+|[A-Z]{1}[a-z]+ {1}[a-z]+\.?"
 # https://regexr.com/60t8c
