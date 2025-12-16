@@ -69,7 +69,6 @@ requirements = [
 'SpeechRecognition==3.8.1',
 'srsly==2.4.2',
 'taxonerd==1.1.1',
-'textract==1.6.4',
 'thinc==8.0.13',
 'threadpoolctl==3.1.0',
 'tokenizers==0.10.3',
