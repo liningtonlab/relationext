@@ -72,7 +72,7 @@ requirements = [
 'thinc==8.0.13',
 'threadpoolctl==3.1.0',
 'tokenizers==0.10.3',
-'torch==1.10.2',
+'torch==1.13.1',
 'tqdm==4.62.3',
 'transformers==4.9.2',
 'typer==0.3.2',
@@ -89,7 +89,7 @@ requirements = [
 setuptools.setup(
     include_package_data=True,
     name='relationext',
-    version='0.12.0',
+    version='0.12.1',
     author='liningtonlabs',
     author_email='liningtonlabstest@gmail.com',
     description='Testing installation of Package',
